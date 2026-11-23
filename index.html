@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#123a32">
+  <meta name="description" content="دفتر محلي لإدارة الصفقات والديون والمخزون والسجلات؛ يعمل دون اتصال ويحفظ البيانات على الجهاز فقط.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="دفتر التاجر">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icon-180.png">
+  <link rel="stylesheet" href="./styles.css">
+  <title>دفتر التاجر المحلي</title>
+</head>
+<body>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <section id="auth-screen" class="auth-screen">
+    <div class="auth-ambient ambient-a"></div><div class="auth-ambient ambient-b"></div>
+    <div class="auth-wrap">
+      <div class="auth-brand"><div class="brand-mark">د</div><div><strong data-i18n="brand">دفتر التاجر</strong><span data-i18n="tagline">منصة واحدة لكل نشاطك</span></div></div>
+      <div class="auth-card">
+        <div class="auth-intro"><div class="eyebrow">دفتر محلي خاص بك</div><h1>يعمل دون اتصال</h1><p>لا يحتاج إدخال السجلات أو مراجعتها إلى الإنترنت.</p></div>
+        <div class="notice info" style="margin:14px 0"><strong>بياناتك تبقى على هذا الجهاز فقط.</strong><br>لا يوجد حساب سحابي ولا مزامنة تلقائية. احتفظ بنسخة احتياطية وانقلها يدوياً عند تغيير الجهاز.</div>
+        <div class="auth-foot"><button type="button" id="auth-language" class="text-button">English</button><span><i class="dot green"></i><span>حفظ محلي على الجهاز</span></span></div>
+      </div>
+      <div class="auth-bottom"><span>© 2026</span><span data-i18n="previewNotice">معاينة تطويرية — لا تستخدم بيانات مالية حقيقية هنا</span></div>
+    </div>
+  </section>
+
+  <section id="app-screen" class="app-screen" hidden>
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-top">
+        <div class="sidebar-brand"><div class="brand-mark small">د</div><div class="brand-copy"><strong data-i18n="brand">دفتر التاجر</strong><span data-i18n="businessSuite">منصة الأعمال</span></div><button id="collapse-sidebar" class="icon-button sidebar-collapse" aria-label="تصغير القائمة">‹</button></div>
+        <button id="workspace-switcher" class="workspace-switcher" type="button" aria-haspopup="dialog" aria-label="دفاتر المتاجر المحلية"><div class="workspace-avatar">م</div><div class="workspace-meta"><strong id="workspace-name">متجري</strong><span id="workspace-role">تخزين محلي</span></div><span class="switch-caret">⌄</span></button>
+        <div class="nav-section-label" data-i18n="workspace">مساحة العمل</div>
+        <nav class="side-nav" aria-label="التنقل الرئيسي">
+          <button class="nav-item active" data-page="dashboard"><span class="nav-icon">◫</span><span data-i18n="dashboard">الرئيسية</span></button>
+          <button class="nav-item" data-page="deals"><span class="nav-icon">↔</span><span data-i18n="deals">الصفقات</span><span class="nav-count" id="deal-count"></span></button>
+          <button class="nav-item" data-page="debts"><span class="nav-icon">◷</span><span data-i18n="debts">الديون والأقساط</span><span class="nav-count alert" id="debt-count"></span></button>
+          <button class="nav-item" data-page="catalog"><span class="nav-icon">▦</span><span data-i18n="catalog">الكتالوج والمخزون</span></button>
+          <button class="nav-item" data-page="repairs"><span class="nav-icon">⌁</span><span data-i18n="repairs">الحرف والإصلاح</span></button>
+          <button class="nav-item" data-page="treasury"><span class="nav-icon">▤</span><span data-i18n="treasury">الخزينة</span></button>
+        </nav>
+        <div class="nav-section-label spaced" data-i18n="specialized">سجلات متخصصة</div>
+        <nav class="side-nav">
+          <button class="nav-item" data-page="livestock"><span class="nav-icon">♧</span><span data-i18n="livestock">الحيوانات والرعاية</span></button>
+          <button class="nav-item" data-page="lands"><span class="nav-icon">⌂</span><span data-i18n="lands">الأراضي والفلاحة</span></button>
+          <button class="nav-item" data-page="reports"><span class="nav-icon">▥</span><span data-i18n="reports">التقارير والمتعاملون</span></button>
+          <button class="nav-item" data-page="ethics"><span class="nav-icon">✳</span><span data-i18n="ethics">التجارة المسؤولة</span></button>
+        </nav>
+      </div>
+      <div class="sidebar-bottom">
+                <button class="nav-item" data-page="settings"><span class="nav-icon">⚙</span><span data-i18n="settings">الإعدادات والنسخ</span></button>
+        <div class="sidebar-profile"><div class="profile-avatar" id="profile-avatar">م</div><div class="profile-meta"><strong id="user-name">المستخدم</strong><span id="user-email"></span></div><button id="logout-btn" class="icon-button" title="تسجيل الخروج" data-i18n-title="logout" hidden>↗</button></div>
+      </div>
+    </aside>
+
+    <div class="mobile-drawer-backdrop" id="drawer-backdrop" hidden></div>
+    <aside id="mobile-drawer" class="mobile-drawer" aria-label="قائمة المزيد" hidden>
+      <div class="drawer-head"><div class="brand-mark small">د</div><strong data-i18n="moreSections">المزيد من الأقسام</strong><button id="close-drawer" class="icon-button">×</button></div>
+      <button class="nav-item" data-page="repairs"><span class="nav-icon">⌁</span><span data-i18n="repairs">الحرف والإصلاح</span></button>
+      <button class="nav-item" data-page="catalog"><span class="nav-icon">▦</span><span data-i18n="catalog">الكتالوج والمخزون</span></button>
+      <button class="nav-item" data-page="treasury"><span class="nav-icon">▤</span><span data-i18n="treasury">الخزينة</span></button>
+      <button class="nav-item" data-page="livestock"><span class="nav-icon">♧</span><span data-i18n="livestock">الحيوانات والرعاية</span></button>
+      <button class="nav-item" data-page="lands"><span class="nav-icon">⌂</span><span data-i18n="lands">الأراضي والفلاحة</span></button>
+      <button class="nav-item" data-page="reports"><span class="nav-icon">▥</span><span data-i18n="reports">التقارير والمتعاملون</span></button>
+      <button class="nav-item" data-page="ethics"><span class="nav-icon">✳</span><span data-i18n="ethics">التجارة المسؤولة</span></button>
+      <button class="nav-item" data-page="settings"><span class="nav-icon">⚙</span><span data-i18n="settings">الإعدادات والنسخ</span></button>
+
+    </aside>
+
+    <main class="main-shell">
+      <header class="topbar">
+        <div class="topbar-left"><button id="mobile-menu" class="icon-button mobile-menu" aria-label="فتح القائمة">☰</button><div class="breadcrumb"><span data-i18n="businessSuite">منصة الأعمال</span><b>/</b><strong id="page-title">الرئيسية</strong></div></div>
+        <div class="topbar-actions"><div class="sync-pill synced" id="sync-pill"><i class="dot green"></i><span id="sync-label">محفوظ على هذا الجهاز</span></div><button id="language-toggle" class="btn btn-ghost btn-small">EN</button><button class="icon-button top-help" data-action="backup" title="نسخة احتياطية" data-i18n-title="backup">⤓</button><button id="profile-menu" class="profile-mini"><span id="profile-mini-letter">م</span></button></div>
+      </header>
+      <div class="trial-banner"><span class="trial-mark">!</span><span data-i18n="localOnlyNotice">التطبيق يعمل دون اتصال بعد تثبيته. البيانات محفوظة على هذا الجهاز فقط؛ خذ نسخة احتياطية بانتظام.</span><button id="dismiss-banner" class="icon-button">×</button></div>
+      <div class="offline-banner" id="offline-banner" hidden></div>
+      <section id="page-view" class="page-view" tabindex="-1"></section>
+      <footer class="app-footer"><span>دفتر محلي · v1.0</span><span data-i18n="footerPrivacy">بياناتك محفوظة محلياً على هذا الجهاز</span><button data-action="privacy" class="text-button" data-i18n="privacy">الخصوصية</button></footer>
+    </main>
+    <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="التنقل السفلي">
+      <button class="mobile-tab active" data-page="dashboard"><span>◫</span><small data-i18n="home">الرئيسية</small></button>
+      <button class="mobile-tab" data-page="deals"><span>↔</span><small data-i18n="deals">الصفقات</small></button>
+      <button class="mobile-tab" data-page="debts"><span>◷</span><small data-i18n="debts">الديون</small></button>
+      <button class="mobile-tab" data-page="livestock"><span>♧</span><small data-i18n="livestockShort">السجلات</small></button>
+      <button class="mobile-tab" id="mobile-more"><span>•••</span><small data-i18n="more">المزيد</small></button>
+    </nav>
+  </section>
+
+  <div id="modal-root" class="modal-root" hidden></div>
+  <script src="./app.js" defer></script>
+  <script src="./pages.js" defer></script>
+  <script src="./main.js" defer></script>
+</body>
+</html>
