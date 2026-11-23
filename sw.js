@@ -1,4 +1,4 @@
-const CACHE='merchant-ledger-shell-v6';
+const CACHE='merchant-ledger-shell-v8';
 const APP_ROOT=new URL('./',self.registration.scope);
 const appURL=path=>new URL(path,APP_ROOT).href;
 const SHELL=['','styles.css','app.js','pages.js','main.js','manifest.webmanifest','icon.svg','icon-192.png','icon-512.png','icon-180.png'].map(appURL);

@@ -45,3 +45,18 @@
   .sync-pill span{max-width:60px}
   .mobile-tab small{font-size:.6rem}
 }
+
+/* Prevent iOS Safari's native date/time controls from escaping narrow cards. */
+.form-grid>.field{min-width:0;max-width:100%}
+.field input[type="date"],.field input[type="time"],.field input[type="datetime-local"]{display:block;width:100%;min-width:0!important;max-width:100%!important;box-sizing:border-box;-webkit-appearance:none;appearance:none;text-align:center}
+.field input[type="date"]::-webkit-date-and-time-value,.field input[type="time"]::-webkit-date-and-time-value,.field input[type="datetime-local"]::-webkit-date-and-time-value{display:block;min-width:0;max-width:100%;margin:0;text-align:center}
+.contact-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:7px 0}
+.contact-name{color:var(--muted);font-size:.72rem;font-weight:760}
+.contact-actions .btn{min-height:38px;text-decoration:none}
+.ethics-card ul,.guide-checklist{margin:9px 0 0;padding-inline-start:1.35rem;display:grid;gap:7px;color:var(--ink-2);font-size:.76rem}
+.guide-checklist{margin:0}
+
+/* Keep select controls readable on narrow phones and give RTL a single, predictable chevron. */
+.field select{-webkit-appearance:none;appearance:none;background-color:#fff;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%237b8b85' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:12px 8px;padding-inline-start:11px;padding-inline-end:34px}
+html[dir="rtl"] .field select{background-position:left 12px center;padding-inline-start:34px;padding-inline-end:11px}
+.field select::-ms-expand{display:none}
