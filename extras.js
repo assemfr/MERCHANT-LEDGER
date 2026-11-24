@@ -89,7 +89,7 @@ function zkHerdForm(){
   return `<form id="zk-form" data-tab="herd" onsubmit="return false"><div class="form-grid">${zf('cattle',['عدد البقر','Cattle'],h.c,1)}${zf('small',['عدد الغنم والماعز','Sheep and goats'],h.s,1)}${zf('camel',['عدد الإبل','Camels'],h.k,1)}</div><label class="chk"><input type="checkbox" name="trade"> ${B('معدّة للبيع والتجارة (تُزكّى بقيمتها كعروض تجارة)','Held for trade (zakat on value as trade goods)')}</label><div id="zk-out" class="zk-out" aria-live="polite"></div>${zkNote('الأعداد مأخوذة من سجل الحيوانات وقابلة للتعديل. الشروط: ملك تام، وبلوغ النصاب، وتمام حول هجري (ويُضمّ النتاج إلى أمهاته). ما بين النصابين لا زكاة فيه. عند المالكية تجب الزكاة ولو كانت الأنعام معلوفة، وعند الجمهور يُشترط السوم (الرعي أغلب العام). الغنم والماعز يُضمّان. سنّ التبيع والمسنة يختلف بين المذاهب فاسأل عالماً عن السن المعتبر. الدواجن لا زكاة فيها إلا للتجارة.','Conditions: full ownership, reaching the nisab and a full lunar year (offspring join their mothers). Nothing is due between thresholds. Malikis require zakat even if the animals are fed; the majority require free grazing most of the year. Sheep and goats combine. The age of tabi\' and musinna differs by school; ask a scholar. Poultry are only zakatable as trade goods.')}</form>`;
 }
 function zkCropForm(){
-  return `<form id="zk-form" data-tab="crop" onsubmit="return false"><div class="form-grid">${zf('qty',['كمية المحصول (كلغ)','Harvest quantity (kg)'],'')}${zf('nisab',['النصاب (كلغ)','Nisab (kg)'],653)}<label class="field"><span>${B('طريقة السقي','Irrigation')}</span><select name="mode" class="control"><option value="0.1">${B('مطر أو أنهار بلا تكلفة (10٪)','Rain / natural, no cost (10%)')}</option><option value="0.05">${B('سقي بتكلفة: آبار ومضخات (5٪)','Irrigated at cost: wells/pumps (5%)')}</option><option value="0.075">${B('مختلط بالتساوي (7.5٪)','Mixed equally (7.5%)')}</option></select></label></div><div id="zk-out" class="zk-out" aria-live="polite"></div>${zkNote('تجب عند الحصاد دون اشتراط حول، وتُخرج من عين الحب عند الجمهور. النصاب 5 أوسق ≈ 653 كلغ تقريباً (يقدّره المعاصرون بين نحو 612 و653 حسب الحب والصاع؛ عدّل الخانة بما تفتي به جهتك الشرعية). الجمهور على أن تكاليف الزراعة لا تُخصم قبل الحساب. عند المالكية تجب في الحبوب والقطاني (الفول والعدس والحمص) والتمر والزبيب والزيتون، أما الخضر والفواكه الطرية فيدخل ثمنها في زكاة النقود إن بلغ النصاب وحال الحول. في الأرض المكتراة تكون الزكاة على صاحب الزرع، وأجرة الكراء مال المؤجّر يدخل في زكاة نقوده.','Due at harvest with no one-year condition; paid from the grain itself per the majority. Nisab = 5 awsuq, about 653 kg (estimates vary by grain and measure; edit the field to follow your authority). The majority do not deduct farming costs first. Malikis apply it to grains, legumes, dates, raisins and olives; fresh vegetables and fruit enter cash zakat via their sale price once nisab and a year are met. On rented land the zakat is on the crop owner; the rent is the landlord\'s money in his cash zakat.')}</form>`;
+  return `<form id="zk-form" data-tab="crop" onsubmit="return false"><div class="form-grid">${zf('qty',['كمية المحصول (كلغ)','Harvest quantity (kg)'],'')}${zf('nisab',['النصاب (كلغ)','Nisab (kg)'],653)}<label class="field"><span>${B('طريقة السقي','Irrigation')}</span><select name="mode" class="control"><option value="0.1">${B('مطر أو أنهار بلا تكلفة (10٪)','Rain / natural, no cost (10%)')}</option><option value="0.05">${B('سقي بتكلفة: آبار ومضخات (5٪)','Irrigated at cost: wells/pumps (5%)')}</option><option value="0.075">${B('مختلط بالتساوي (7.5٪)','Mixed equally (7.5%)')}</option></select></label></div><div id="zk-out" class="zk-out" aria-live="polite"></div>${zkNote('تجب عند الحصاد دون اشتراط حول، وتُخرج من عين الحب عند الجمهور. النصاب 5 أوسق ≈ 653 كلغ تقريباً (يقدّره المعاصرون بين نحو 612 و653 حسب الحب والصاع؛ عدّل الخانة بما تفتي به جهتك الشرعية). الجمهور على أن تكاليف الزراعة لا تُخصم قبل الحساب. عند المالكية تجب في الحبوب والقطاني (الفول والعدس والحمص) والتمر والزبيب والزيتون، أما الخضر والفواكه الطرية فيدخل ثمنها في زكاة النقود إن بلغ النصاب وحال الحول. في الأرض المكتراة تكون الزكاة على صاحب الزرع، وأجرة الكراء مال المؤجّر يدخل في زكاة نقوده.','Due at harvest with no one-year condition; paid from the grain itself per the majority. Nisab = 5 awsuq ≈ 653 kg (contemporary estimates range roughly 612–653 kg by grain and sa\'; edit the field to follow your authority). The majority do not deduct farming costs first. Malikis apply it to grains, legumes, dates, raisins and olives; fresh vegetables and fruit enter cash zakat via their sale price once nisab and a year are met. On rented land the zakat is on the crop owner; the rent is the landlord\'s money in his cash zakat.')}</form>`;
 }
 function zakatHTML(){
   const tabs=[['trade','زكاة التجارة','Trade'],['herd','زكاة الماشية','Livestock'],['crop','زكاة الحبوب والثمار','Crops']].map(t=>`<button type="button" class="${zkTab===t[0]?'active':''}" data-zk-tab="${t[0]}">${B(t[1],t[2])}</button>`).join('');
@@ -119,9 +119,7 @@ function zakatCalc(){
   if(tab==='trade'){
     const base=v('cash')+v('goods')+v('rec')-v('debt'),gold=v('gold'),nis=gold*85;
     if(!gold){out.textContent=B('أدخل سعر غرام الذهب لمعرفة النصاب.','Enter the gold price per gram to see the nisab.');return}
-    out.innerHTML=`${B('الوعاء الزكوي','Zakatable base')}: <b>${money(base)}</b>
-${B('النصاب','Nisab')}: <b>${money(nis)}</b>
-${base>=nis?`${B('الزكاة الواجبة (2.5٪)','Zakat due (2.5%)')}: <b>${money(base*0.025)}</b>`:B('لم يبلغ الوعاء النصاب.','The base is below the nisab.')}`;
+    out.innerHTML=`${B('الوعاء الزكوي','Zakatable base')}: <b>${money(base)}</b><br>${B('النصاب','Nisab')}: <b>${money(nis)}</b><br>${base>=nis?`${B('الزكاة الواجبة (2.5٪)','Zakat due (2.5%)')}: <b>${money(base*0.025)}</b>`:B('لم يبلغ الوعاء النصاب.','The base is below the nisab.')}`;
   }else if(tab==='herd'){
     if(F.elements.trade.checked){out.textContent=B('الأنعام المعدّة للتجارة تُزكّى بقيمتها السوقية 2.5٪ ضمن تبويب «زكاة التجارة».','Livestock held for trade is zakatable on market value at 2.5% under the Trade tab.');return}
     const c=Math.floor(v('cattle')),s=Math.floor(v('small')),k=Math.floor(v('camel')),L=[];
@@ -134,8 +132,7 @@ ${base>=nis?`${B('الزكاة الواجبة (2.5٪)','Zakat due (2.5%)')}: <b>
     const q=v('qty'),nis=v('nisab'),rate=parseFloat(F.elements.mode.value);
     if(!q){out.textContent=B('أدخل كمية المحصول بالكيلوغرام.','Enter the harvest quantity in kg.');return}
     const nf=x=>x.toLocaleString(uiLang==='en'?'en-US':'ar-MA',{maximumFractionDigits:2});
-    out.innerHTML=q>=nis?`${B('الزكاة الواجبة','Zakat due')} (${rate*100}٪): <b>${nf(q*rate)} ${B('كلغ','kg')}</b>
-${B('الباقي لك','Remaining for you')}: <b>${nf(q-q*rate)} ${B('كلغ','kg')}</b>`:B(`المحصول دون النصاب (${nf(nis)} كلغ).`,`The harvest is below the nisab (${nf(nis)} kg).`);
+    out.innerHTML=q>=nis?`${B('الزكاة الواجبة','Zakat due')} (${rate*100}٪): <b>${nf(q*rate)} ${B('كلغ','kg')}</b><br>${B('الباقي لك','Remaining for you')}: <b>${nf(q-q*rate)} ${B('كلغ','kg')}</b>`:B(`المحصول دون النصاب (${nf(nis)} كلغ).`,`The harvest is below the nisab (${nf(nis)} kg).`);
   }
 }
 
@@ -151,12 +148,12 @@ function setInert(on){['#app-screen','#auth-screen','#modal-root'].forEach(s=>{c
 function buildLock(){
   if($('#lock-screen'))return;
   const d=document.createElement('div');d.id='lock-screen';d.hidden=true;d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');
-  d.innerHTML=`<div class="lock-card"><div class="brand-mark lock-brand-mark"><img src="./brand.svg" alt=""></div><h2 id="lock-title"></h2><p id="lock-sub"></p><input id="lock-input" class="control" type="password" inputmode="numeric" autocomplete="off" maxlength="8"><div id="lock-msg" role="alert"></div><button type="button" id="lock-go" class="btn btn-primary"></button><small id="lock-forgot"></small></div>`;
+  d.innerHTML=`<div class="lock-card"><div class="brand-mark">د</div><h2 id="lock-title"></h2><p id="lock-sub"></p><input id="lock-input" class="control" type="password" inputmode="numeric" autocomplete="off" maxlength="8"><div id="lock-msg" role="alert"></div><button type="button" id="lock-go" class="btn btn-primary"></button><small id="lock-forgot"></small></div>`;
   document.body.append(d);
   $('#lock-go').onclick=tryUnlock;
   $('#lock-input').addEventListener('keydown',e=>{if(e.key==='Enter')tryUnlock()});
 }
-function lockTexts(){$('#lock-title').textContent=B('التطبيق مقفل','App locked');$('#lock-sub').textContent=B('أدخل رمز القفل لفتح دفترك','Enter your PIN to open your ledger');$('#lock-input').setAttribute('aria-label',B('رمز القفل','PIN'));$('#lock-go').textContent=B('فتح','Unlock');$('#lock-forgot').textContent=B('لا يمكن استعادة الرمز. لا تمسح بيانات التطبيق أو المتصفح؛ فقد يؤدي ذلك إلى فقد الدفتر المحلي. اطلب مساعدة قبل أي إجراء قد يحذف البيانات.','The PIN cannot be recovered. Do not clear app or browser data; that could erase your local ledger. Get help before taking any action that may delete data.')}
+function lockTexts(){$('#lock-title').textContent=B('التطبيق مقفل','App locked');$('#lock-sub').textContent=B('أدخل رمز القفل لفتح دفترك','Enter your PIN to open your ledger');$('#lock-input').setAttribute('aria-label',B('رمز القفل','PIN'));$('#lock-go').textContent=B('فتح','Unlock');$('#lock-forgot').textContent=B('نسيت الرمز؟ لا يمكن استرجاعه؛ يلزم حذف بيانات التطبيق من إعدادات الجهاز ثم استرجاع نسخة احتياطية.','Forgot it? It cannot be recovered; you must clear app data in device settings and restore a backup.')}
 function lockNow(){
   if(!getPin()||!canPin())return;buildLock();locked=true;lockTexts();$('#lock-screen').hidden=false;setInert(true);$('#lock-input').value='';$('#lock-msg').textContent='';setTimeout(()=>$('#lock-input').focus(),50);
 }
@@ -202,11 +199,11 @@ function lockPanel(){
   return `<div class="stack" style="margin-top:14px">${panel('قفل التطبيق',body)}</div>`;
 }
 
+
 /* ---------- richer demo data (all flagged isDemo so "clear demo" removes it) ---------- */
 const _seed=seedDemo;
 seedDemo=function(){
-  const had=typeof demoCount==='function'?demoCount()>0:COLLECTIONS.some(c=>(state[c]||[]).some(x=>x&&!x._deleted&&x.isDemo===true));
-  _seed();
+  const had=recordsLive().some(r=>r.isDemo);_seed();
   if(had||!settingsWrite())return;
   const d=today(),cow=createDoc('animals',{isDemo:true,name:'بقرة حلوب تجريبية',species:'cattle',tag:'DEMO-C02',breed:'هولشتاين',mother:'DEMO-C00',father:'DEMO-B07',birth:'2021-03-10',sex:'أنثى',feed:'برسيم + علف مركب',location:'الحظيرة 1',notes:'سجل توضيحي فقط'});
   createDoc('animals',{isDemo:true,name:'عجل تجريبي',species:'cattle',tag:'DEMO-C03',breed:'هولشتاين',mother:'DEMO-C02',father:'DEMO-B07',birth:'2026-02-14',sex:'ذكر',feed:'حليب وعلف مركّز',location:'الحظيرة 1',notes:'سجل توضيحي فقط'});

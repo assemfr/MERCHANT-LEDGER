@@ -1,21 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#15735A"/><stop offset="1" stop-color="#0B4037"/></linearGradient>
-    <linearGradient id="page" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#FFFFFF"/><stop offset="1" stop-color="#EAF4EE"/></linearGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="15" stdDeviation="14" flood-color="#062E26" flood-opacity=".28"/></filter>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1c7457"/>
+      <stop offset="1" stop-color="#104b3d"/>
+    </linearGradient>
   </defs>
-  <rect width="512" height="512" rx="118" fill="url(#bg)"/>
-  <circle cx="256" cy="250" r="206" fill="#FFFFFF" opacity=".035"/>
-  <g filter="url(#shadow)" stroke-linejoin="round">
-    <path d="M112 156c46-24 92-18 144 9 52-27 98-33 144-9v205c-49-18-96-12-144 20-48-32-95-38-144-20V156Z" fill="#DCEBE2"/>
-    <path d="M127 165c39-18 78-11 120 11v181c-42-23-81-28-120-14V165Z" fill="url(#page)" stroke="#D1E5D8" stroke-width="5"/>
-    <path d="M265 176c42-22 81-29 120-11v178c-39-14-78-9-120 14V176Z" fill="url(#page)" stroke="#D1E5D8" stroke-width="5"/>
-    <path d="M256 177v180" stroke="#8BB9A0" stroke-width="7"/>
-  </g>
-  <g stroke="#8AB89D" stroke-width="9" stroke-linecap="round" opacity=".9">
-    <path d="M151 209c24-6 47-3 70 5"/><path d="M151 244c24-5 47-2 70 6"/><path d="M151 279c24-3 47 0 70 7"/><path d="M151 314c24-1 47 2 70 8"/>
-    <path d="M291 215c24-10 47-15 70-14"/><path d="M291 250c24-9 47-13 70-12"/><path d="M291 285c24-7 47-11 70-10"/><path d="M291 320c24-5 47-9 70-8"/>
-  </g>
-  <circle cx="371" cy="350" r="54" fill="#F0C36A" stroke="#0B493B" stroke-width="9"/>
-  <path d="m346 350 17 17 34-37" fill="none" stroke="#0B493B" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <path d="M128 145c0-17 14-31 31-31h194c17 0 31 14 31 31v218c0 17-14 31-31 31H159c-17 0-31-14-31-31V145Z" fill="#fff" opacity=".97"/>
+  <path d="M164 177h183M164 222h183M164 267h95M164 312h130" fill="none" stroke="#d5e8dc" stroke-width="16" stroke-linecap="round"/>
+  <path d="M286 304c0-20 16-36 36-36s36 16 36 36v47c0 20-16 36-36 36s-36-16-36-36v-47Z" fill="#2b8967"/>
+  <path d="M315 318v32m-10-11 10 11 10-11" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="221" y="374" fill="#175d47" font-size="106" font-family="Arial,sans-serif" font-weight="800" text-anchor="middle">د</text>
 </svg>

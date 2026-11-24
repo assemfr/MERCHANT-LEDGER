@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <script>try{var t=localStorage.getItem("ledger-theme")||"auto";var d=t==="dark"||(t==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.dataset.theme=d?"dark":"light"}catch(e){}</script>
   <meta name="theme-color" content="#123a32">
   <meta name="description" content="دفتر محلي لإدارة الصفقات والديون والمخزون والسجلات؛ يعمل دون اتصال ويحفظ البيانات على الجهاز فقط.">
   <meta name="mobile-web-app-capable" content="yes">
@@ -21,7 +22,7 @@
   <section id="auth-screen" class="auth-screen">
     <div class="auth-ambient ambient-a"></div><div class="auth-ambient ambient-b"></div>
     <div class="auth-wrap">
-      <div class="auth-brand"><div class="brand-mark"><img src="./brand.svg" alt=""></div><div><strong data-i18n="brand">دفتر التاجر</strong><span data-i18n="tagline">منصة واحدة لكل نشاطك</span></div></div>
+      <div class="auth-brand"><div class="brand-mark">د</div><div><strong data-i18n="brand">دفتر التاجر</strong><span data-i18n="tagline">منصة واحدة لكل نشاطك</span></div></div>
       <div class="auth-card">
         <div class="auth-intro"><div class="eyebrow">دفتر محلي خاص بك</div><h1>يعمل دون اتصال</h1><p>لا يحتاج إدخال السجلات أو مراجعتها إلى الإنترنت.</p></div>
         <div class="notice info" style="margin:14px 0"><strong>بياناتك تبقى على هذا الجهاز فقط.</strong><br>لا يوجد حساب سحابي ولا مزامنة تلقائية. احتفظ بنسخة احتياطية وانقلها يدوياً عند تغيير الجهاز.</div>
@@ -34,7 +35,7 @@
   <section id="app-screen" class="app-screen" hidden>
     <aside id="sidebar" class="sidebar">
       <div class="sidebar-top">
-        <div class="sidebar-brand"><div class="brand-mark small"><img src="./brand.svg" alt=""></div><div class="brand-copy"><strong data-i18n="brand">دفتر التاجر</strong><span data-i18n="businessSuite">منصة الأعمال</span></div><button id="collapse-sidebar" class="icon-button sidebar-collapse" aria-label="تصغير القائمة">‹</button></div>
+        <div class="sidebar-brand"><div class="brand-mark small">د</div><div class="brand-copy"><strong data-i18n="brand">دفتر التاجر</strong><span data-i18n="businessSuite">منصة الأعمال</span></div><button id="collapse-sidebar" class="icon-button sidebar-collapse" aria-label="تصغير القائمة">‹</button></div>
         <button id="workspace-switcher" class="workspace-switcher" type="button" aria-haspopup="dialog" aria-label="دفاتر المتاجر المحلية"><div class="workspace-avatar">م</div><div class="workspace-meta"><strong id="workspace-name">متجري</strong><span id="workspace-role">تخزين محلي</span></div><span class="switch-caret">⌄</span></button>
         <div class="nav-section-label" data-i18n="workspace">مساحة العمل</div>
         <nav class="side-nav" aria-label="التنقل الرئيسي">
@@ -61,7 +62,7 @@
 
     <div class="mobile-drawer-backdrop" id="drawer-backdrop" hidden></div>
     <aside id="mobile-drawer" class="mobile-drawer" aria-label="قائمة المزيد" hidden>
-      <div class="drawer-head"><div class="brand-mark small"><img src="./brand.svg" alt=""></div><strong data-i18n="moreSections">المزيد من الأقسام</strong><button id="close-drawer" class="icon-button">×</button></div>
+      <div class="drawer-head"><div class="brand-mark small">د</div><strong data-i18n="moreSections">المزيد من الأقسام</strong><button id="close-drawer" class="icon-button">×</button></div>
       <button class="nav-item" data-page="repairs"><span class="nav-icon">⌁</span><span data-i18n="repairs">الحرف والإصلاح</span></button>
       <button class="nav-item" data-page="catalog"><span class="nav-icon">▦</span><span data-i18n="catalog">الكتالوج والمخزون</span></button>
       <button class="nav-item" data-page="treasury"><span class="nav-icon">▤</span><span data-i18n="treasury">الخزينة</span></button>
@@ -76,12 +77,12 @@
     <main class="main-shell">
       <header class="topbar">
         <div class="topbar-left"><button id="mobile-menu" class="icon-button mobile-menu" aria-label="فتح القائمة">☰</button><div class="breadcrumb"><span data-i18n="businessSuite">منصة الأعمال</span><b>/</b><strong id="page-title">الرئيسية</strong></div></div>
-        <div class="topbar-actions"><div class="sync-pill local" id="sync-pill" role="status" aria-live="polite" aria-label="محفوظ على هذا الجهاز" title="النقطة الخضراء تعني الحفظ المحلي على هذا الجهاز فقط؛ لا توجد مزامنة سحابية." data-short-label="محلي"><i class="dot green"></i><span id="sync-label">محفوظ على هذا الجهاز</span></div><button id="language-toggle" class="btn btn-ghost btn-small">EN</button><button class="icon-button top-help" data-action="backup" title="نسخة احتياطية" data-i18n-title="backup">⤓</button><button id="profile-menu" class="profile-mini"><span id="profile-mini-letter">م</span></button></div>
+        <div class="topbar-actions"><div class="sync-pill synced" id="sync-pill"><i class="dot green"></i><span id="sync-label">محفوظ على هذا الجهاز</span></div><button id="language-toggle" class="btn btn-ghost btn-small">EN</button><button class="icon-button top-help" data-action="backup" title="نسخة احتياطية" data-i18n-title="backup">⤓</button><button id="profile-menu" class="profile-mini"><span id="profile-mini-letter">م</span></button></div>
       </header>
       <div class="trial-banner"><span class="trial-mark">!</span><span data-i18n="localOnlyNotice">التطبيق يعمل دون اتصال بعد تثبيته. البيانات محفوظة على هذا الجهاز فقط؛ خذ نسخة احتياطية بانتظام.</span><button id="dismiss-banner" class="icon-button">×</button></div>
       <div class="offline-banner" id="offline-banner" hidden></div>
       <section id="page-view" class="page-view" tabindex="-1"></section>
-      <footer class="app-footer"><span>دفتر محلي · v1.3.1 / v12</span><span data-i18n="footerPrivacy">بياناتك محفوظة محلياً على هذا الجهاز</span><button data-action="privacy" class="text-button" data-i18n="privacy">الخصوصية</button></footer>
+      <footer class="app-footer"><span>دفتر محلي · v1.1</span><span data-i18n="footerPrivacy">بياناتك محفوظة محلياً على هذا الجهاز</span><button data-action="privacy" class="text-button" data-i18n="privacy">الخصوصية</button></footer>
     </main>
     <nav class="mobile-bottom-nav" id="mobile-bottom-nav" aria-label="التنقل السفلي">
       <button class="mobile-tab active" data-page="dashboard"><span>◫</span><small data-i18n="home">الرئيسية</small></button>
@@ -97,6 +98,7 @@
   <script src="./pages.js" defer></script>
   <script src="./main.js" defer></script>
   <script src="./extras.js" defer></script>
+  <script src="./polish.js" defer></script>
   <script src="./nav.js" defer></script>
 </body>
 </html>

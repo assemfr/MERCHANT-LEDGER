@@ -29,6 +29,8 @@ eyeoff:'<path d="M3 3l18 18M10.6 6.2A10 10 0 0 1 12 6c6 0 10 6 10 6a17 17 0 0 1-
 type:'<path d="M4 7V5h16v2M9 20h6M12 5v15"/>',
 share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.6l6.8-4.2M8.6 13.4l6.8 4.2"/>',
 shieldcheck:'<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/>',
+moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
+sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
 dots:'<circle cx="5" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="19" cy="12" r="1.6" fill="currentColor"/>'
 };
 const ic=(n,s=22)=>`<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${P[n]}</svg>`;
@@ -45,10 +47,7 @@ const GROUPS=[
 ['سجلات متخصصة','Specialised records',[['livestock','paw','الحيوانات والرعاية','Livestock & care'],['lands','pin','الأراضي والفلاحة','Land & farming']]],
 ['معرفة وتقارير','Insight',[['reports','chart','التقارير والمتعاملون','Reports & contacts'],['ethics','scale','التجارة المسؤولة والزكاة','Responsible trade & zakat']]]];
 const LS=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}};
-const FONT=[['عادي','Normal',''],['كبير','Large','18px'],['أكبر','Larger','20px']];
-let fontI=Math.min(2,parseInt(LS('ledger-font')||'0')||0),hideAmt=LS('ledger-hide-amounts')==='1',persisted=null;
-const applyFont=()=>{document.documentElement.style.fontSize=FONT[fontI][2]};
-const _money=money;money=function(v){return hideAmt?`•••• ${esc(currency())}`:_money(v)};
+let persisted=null;
 if(navigator.storage&&navigator.storage.persisted)navigator.storage.persisted().then(p=>persisted=p).catch(()=>{});
 const lastBackup=()=>{const t=LS('ledger-last-backup');return t?Math.floor((Date.now()-new Date(t))/864e5):null};
 const _dl=downloadBlob;downloadBlob=function(n,b){if(/^merchant-ledger.*\.json$/.test(n))LS('ledger-last-backup',new Date().toISOString());_dl(n,b)};
@@ -56,8 +55,8 @@ const backupSub=()=>{const d=lastBackup();return d===null?B('لم تؤخذ نس�
 /* Options menu = quick utilities only (navigation lives in the bottom bar / More sheet) */
 const OPTG=()=>[
  [B('العرض','Display'),[
-  {k:'nx:amounts',i:hideAmt?'eyeoff':'eye',l:hideAmt?B('إظهار المبالغ','Show amounts'):B('إخفاء المبالغ','Hide amounts'),s:hideAmt?B('مخفية','Hidden'):''},
-  {k:'nx:font',i:'type',l:B('حجم الخط','Text size'),s:B(FONT[fontI][0],FONT[fontI][1])}]],
+  {k:'nx:amounts',i:PX.hide()?'eyeoff':'eye',l:PX.hide()?B('إظهار المبالغ','Show amounts'):B('إخفاء المبالغ','Hide amounts')},
+  {k:'nx:theme',i:PX.dark()?'sun':'moon',l:B('المظهر','Theme'),s:PX.themeLabel()}]],
  [B('البيانات','Data'),[
   {k:'action:backup',i:'download',l:B('نسخة احتياطية (JSON)','Backup (JSON)'),sub:backupSub()},
   {k:'action:encrypted-backup',i:'lock',l:B('نسخة مشفّرة بكلمة مرور','Password-encrypted backup')},
@@ -130,20 +129,55 @@ async function shareApp(){
 function handleNx(k){
   if(k==='install')doInstall();
   else if(k==='ws')openWorkspaceModal();
-  else if(k==='amounts'){hideAmt=!hideAmt;LS('ledger-hide-amounts',hideAmt?'1':'0');render();toast(hideAmt?B('أُخفيت المبالغ','Amounts hidden'):B('أُظهرت المبالغ','Amounts shown'))}
-  else if(k==='font'){fontI=(fontI+1)%FONT.length;LS('ledger-font',String(fontI));applyFont();toast(B('حجم الخط: ','Text size: ')+B(FONT[fontI][0],FONT[fontI][1]))}
+  else if(k==='amounts')PX.toggleHide();
+  else if(k==='theme')PX.cycleTheme();
   else if(k==='persist')askPersist();
   else if(k==='share')shareApp();
+}
+
+
+/* ----- status pill: what the dot means ----- */
+let savedAt=null;
+function shortLabel(){
+  const p=$('#sync-pill'),l=$('#sync-label');if(!p||!l||!matchMedia('(max-width:620px)').matches)return;
+  l.textContent=p.classList.contains('error')?B('خطأ','Error'):B('محفوظ','Saved');
+}
+const _ss=setSyncState;
+setSyncState=function(t,l){_ss(t,l);if(t==='local'||t==='synced')savedAt=Date.now();shortLabel();pillState()};
+function needBackup(){try{const d=lastBackup();return recordsLive().length>0&&(d===null||d>14)}catch(e){return false}}
+function pillState(){const p=$('#sync-pill');if(p)p.classList.toggle('warn',needBackup()&&!p.classList.contains('error'))}
+function closeStatus(){const m=$('#nx-status');if(!m||m.hidden)return;m.hidden=true;m.innerHTML=''}
+function statusHTML(){
+  let n=0;try{n=recordsLive().length}catch(e){}
+  const d=lastBackup(),need=needBackup(),ago=savedAt?Math.max(0,Math.round((Date.now()-savedAt)/60000)):null;
+  const row=(k,v,c)=>`<div class="st-row"><span>${k}</span><b class="${c||''}">${v}</b></div>`;
+  return `<div class="st-head"><i class="dot ${need?'amber':'green'}"></i><strong>${need?B('يُنصح بنسخة احتياطية','A backup is recommended'):B('بياناتك محفوظة','Your data is saved')}</strong></div>
+<p class="st-note">${B('كل تغيير يُحفظ فوراً على هذا الجهاز فقط ولا يُرسل إلى أي خادم.','Every change is saved instantly on this device only; nothing is sent to any server.')}</p>
+${row(B('السجلات','Records'),n)}${row(B('آخر حفظ','Last saved'),ago===null?'—':ago<1?B('الآن','just now'):B(`قبل ${ago} د`,`${ago} min ago`))}${row(B('آخر نسخة احتياطية','Last backup'),d===null?B('لا توجد','None'):d===0?B('اليوم','Today'):B(`قبل ${d} يوم`,`${d} d ago`),need?'warn':'')}${row(B('حماية التخزين','Storage protection'),persisted?B('مفعّلة','On'):B('غير مفعّلة','Off'),persisted?'':'warn')}
+<button type="button" class="btn btn-primary btn-small" data-action="backup">${B('نسخة احتياطية الآن','Back up now')}</button>
+<div class="st-legend"><span><i class="dot green"></i>${B('محفوظ','Saved')}</span><span><i class="dot amber"></i>${B('خذ نسخة','Back up')}</span><span><i class="dot red"></i>${B('تعذّر الحفظ','Save failed')}</span></div>`;
+}
+function toggleStatus(pill){
+  let m=$('#nx-status');
+  if(m&&!m.hidden){closeStatus();return}
+  closeMenu();
+  if(!m){m=document.createElement('div');m.id='nx-status';m.setAttribute('role','dialog');m.hidden=true;document.body.append(m)}
+  m.setAttribute('aria-label',B('حالة البيانات','Data status'));m.innerHTML=statusHTML();
+  const r=pill.getBoundingClientRect(),w=290,rtl=document.documentElement.dir==='rtl';
+  m.style.top=(r.bottom+8)+'px';m.style.right='auto';
+  m.style.left=Math.max(8,Math.min(rtl?r.left:r.right-w,innerWidth-w-8))+'px';
+  m.hidden=false;
 }
 
 /* ----- build bars ----- */
 function buildBar(){
   const nav=$('#mobile-bottom-nav');if(!nav||nav.dataset.nx)return;nav.dataset.nx='1';
   const tab=(p,i)=>`<button type="button" class="mobile-tab" data-page="${p}" id="nx-t-${p}"><span>${ic(i,22)}</span><small></small><i class="tab-badge" hidden></i></button>`;
-  nav.innerHTML=tab('dashboard','home')+tab('deals','swap')+`<button type="button" class="mobile-fab" id="nx-fab" aria-haspopup="dialog">${ic('plus',26)}</button>`+tab('debts','clock')+`<button type="button" class="mobile-tab" id="nx-more" aria-haspopup="dialog"><span>${ic('grid',22)}</span><small></small></button>`;
+  nav.innerHTML=tab('dashboard','home')+tab('deals','swap')+`<button type="button" class="mobile-fab" id="nx-fab" aria-haspopup="dialog"><span class="fab-pill">${ic('plus',20)}</span><small></small></button>`+tab('debts','clock')+`<button type="button" class="mobile-tab" id="nx-more" aria-haspopup="dialog"><span>${ic('grid',22)}</span><small></small></button>`;
 }
 function buildTop(){
   const act=document.querySelector('.topbar-actions'),left=document.querySelector('.topbar-left');if(!act||act.dataset.nx)return;act.dataset.nx='1';
+  const sp=$('#sync-pill');if(sp){sp.setAttribute('role','button');sp.tabIndex=0;sp.setAttribute('aria-haspopup','dialog')}
   const b=document.createElement('button');b.type='button';b.id='nx-options';b.className='nx-optbtn';b.setAttribute('aria-haspopup','menu');b.setAttribute('aria-expanded','false');b.innerHTML=ic('dots',20);act.append(b);
   const n=document.createElement('button');n.type='button';n.id='nx-new';n.className='btn btn-primary btn-small nx-new';n.setAttribute('aria-haspopup','dialog');n.innerHTML='＋ <span></span>';left.append(n);
 }
@@ -153,11 +187,11 @@ function syncNav(){
   const lab={dashboard:B('الرئيسية','Home'),deals:B('الصفقات','Deals'),debts:B('الديون','Debts')},main=['dashboard','deals','debts'],cp=typeof currentPage!=='undefined'?currentPage:'dashboard';
   for(const k in lab){const b=$('#nx-t-'+k);if(b){b.querySelector('small').textContent=lab[k];b.classList.toggle('active',cp===k)}}
   $('#nx-more small').textContent=B('المزيد','More');$('#nx-more').classList.toggle('active',!main.includes(cp));
-  $('#nx-fab').setAttribute('aria-label',B('إضافة سريعة','Quick add'));
+  $('#nx-fab').setAttribute('aria-label',B('إضافة سريعة','Quick add'));$('#nx-fab small').textContent=B('إضافة','Add');
   const o=overdue(),bd=$('#nx-t-debts .tab-badge');if(bd){bd.textContent=o>9?'9+':o;bd.hidden=!o}
   const ob=$('#nx-options');if(ob){ob.setAttribute('aria-label',B('الخيارات','Options'));ob.title=B('الخيارات','Options')}
   const nw=$('#nx-new span');if(nw)nw.textContent=B('جديد','New');
-  const sp=$('#sync-pill');if(sp){sp.title=B('النقطة الخضراء تعني أن البيانات محفوظة على هذا الجهاز فقط؛ لا توجد مزامنة سحابية.','The green dot means data is saved on this device only; there is no cloud sync.');sp.setAttribute('aria-label',sp.title);sp.dataset.shortLabel=B('محلي','Local')}
+  const sp=$('#sync-pill');if(sp)sp.title=B('اضغط لمعرفة حالة بياناتك','Tap to see your data status');shortLabel();pillState();
 }
 const _render=render;render=function(){_render();syncNav()};
 
@@ -166,7 +200,9 @@ document.addEventListener('click',e=>{
   const t=e.target;
   if(t.closest('#mobile-more,#nx-more,#mobile-menu')){e.preventDefault();e.stopImmediatePropagation();openSheet(B('المزيد','More'),moreHTML(),t.closest('button'));return}
   if(t.closest('#nx-fab,#nx-new')){e.preventDefault();openSheet(B('إضافة سريعة','Quick add'),quickHTML(),t.closest('button'));return}
+  if(t.closest('#sync-pill')){e.preventDefault();toggleStatus(t.closest('#sync-pill'));return}
   if(t.closest('#nx-options')){e.preventDefault();toggleMenu(t.closest('button'));return}
+  const st=$('#nx-status');if(st&&!st.hidden&&!t.closest('#nx-status')){closeStatus()}
   const m=$('#nx-menu');
   if(m&&!m.hidden){
     if(!t.closest('#nx-menu')){closeMenu();return}
@@ -182,7 +218,8 @@ document.addEventListener('click',e=>{
   }
 },true);
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){closeMenu();closeSheet();return}
+  if(e.key==='Escape'){closeMenu();closeStatus();closeSheet();return}
+  if((e.key==='Enter'||e.key===' ')&&document.activeElement&&document.activeElement.id==='sync-pill'){e.preventDefault();toggleStatus(document.activeElement);return}
   const m=$('#nx-menu');
   if(m&&!m.hidden&&(e.key==='ArrowDown'||e.key==='ArrowUp')){
     const it=[...m.querySelectorAll('.nx-opt')],i=it.indexOf(document.activeElement);
@@ -192,7 +229,8 @@ document.addEventListener('keydown',e=>{
 let y0=null;
 document.addEventListener('touchstart',e=>{y0=e.target.closest('.nx-drag')?e.touches[0].clientY:null},{passive:true});
 document.addEventListener('touchend',e=>{if(y0!==null&&e.changedTouches[0].clientY-y0>60)closeSheet();y0=null},{passive:true});
-addEventListener('resize',closeMenu);
+addEventListener('resize',()=>{closeMenu();closeStatus();shortLabel()});
+
 
 /* ----- "new version ready" banner (service-worker update) ----- */
 if('serviceWorker'in navigator&&location.protocol!=='file:'){
@@ -206,7 +244,6 @@ if('serviceWorker'in navigator&&location.protocol!=='file:'){
   });
 }
 
-applyFont();
 buildBar();buildTop();syncNav();
 setTimeout(()=>{try{if(sessionStorage.getItem('nx-bk'))return;sessionStorage.setItem('nx-bk','1');const d=lastBackup();if(recordsLive().length&&(d===null||d>14))toast(B('خذ نسخة احتياطية: ⋯ ← نسخة احتياطية','Take a backup: ⋯ → Backup'))}catch(e){}},4500);
 })();
