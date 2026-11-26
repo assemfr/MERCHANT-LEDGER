@@ -10,9 +10,9 @@ window.askConfirm=function(message,opt){
   return new Promise(res=>{
     const old=document.getElementById('px-confirm');if(old)old.remove();
     const prev=document.activeElement,d=document.createElement('div');d.id='px-confirm';
-    d.innerHTML='<div class="px-cbackdrop"></div><div class="px-cbox" role="alertdialog" aria-modal="true" aria-labelledby="px-ct"><div class="px-cico" aria-hidden="true">!</div><p id="px-ct"></p><div class="px-cbtns"><button type="button" class="btn btn-outline"></button><button type="button" class="btn px-danger"></button></div></div>';
+    d.innerHTML='<div class="px-cbackdrop"></div><div class="px-cbox" role="alertdialog" aria-modal="true" aria-labelledby="px-ct"><div class="px-cico" aria-hidden="true">!</div><p id="px-ct"></p><div class="px-cbtns"><button type="button" class="btn btn-outline"></button><button type="button" class="btn"></button></div></div>';
     d.querySelector('#px-ct').textContent=message;
-    const [no,yes]=d.querySelectorAll('button');
+    const [no,yes]=d.querySelectorAll('button');yes.classList.add(opt.danger===false?'btn-primary':'px-danger');
     no.textContent=opt.cancel||B('إلغاء','Cancel');yes.textContent=opt.ok||B('حذف','Delete');
     const done=v=>{document.removeEventListener('keydown',key,true);d.remove();if(prev&&prev.isConnected&&prev.focus)prev.focus();res(v)};
     const key=e=>{

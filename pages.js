@@ -34,21 +34,22 @@ function renderDeals(){
     </section>
     <section class="form-section">
       <h4>${esc(tr('بيانات السلعة'))}</h4><p>${esc(tr('ما السلعة أو الخدمة التي شملتها الصفقة؟'))}</p>
-      <div class="form-grid">${itemInput}${field('qty','الكمية','number',edit?.qty||1,{required:true,min:0.01,step:'any'})}${selectField('goodType','نوع السلعة',goodsOptions(edit?.goodType||''),edit?.goodType||'')}${selectField('animalId','حيوان مرتبط',animalOpts,edit?.animalId||'')}${movementInput}</div>${inventoryNotice}
+      <div class="form-grid">${itemInput}${field('qty','الكمية','number',edit?.qty||1,{required:true,min:0.01,step:'any'})}${typeof autoCategoryField==='function'?autoCategoryField(edit):selectField('goodType','نوع السلعة',goodsOptions(edit?.goodType||''),edit?.goodType||'')}${selectField('animalId','حيوان مرتبط',animalOpts,edit?.animalId||'')}${movementInput}</div>${inventoryNotice}<div id="px-last" class="px-hint" hidden></div>
     </section>
     <section class="form-section">
       <h4>${esc(tr('المورد والزبون'))}</h4><p>${esc(tr('أدخل بيانات المورد والزبون عند توفرها.'))}</p>
-      <div class="form-grid">${field('supplier','اسم المورد','text',edit?.supplier||'')}${field('supplierPhone','هاتف المورد','tel',edit?.supplierPhone||'')}${field('customer','اسم الزبون','text',edit?.customer||'')}${field('customerPhone','هاتف الزبون','tel',edit?.customerPhone||'')}</div>
+      <div class="form-grid">${field('supplier','اسم المورد','text',edit?.supplier||'',{list:'px-suppliers'})}${field('supplierPhone','هاتف المورد','tel',edit?.supplierPhone||'')}${field('customer','اسم الزبون','text',edit?.customer||'',{list:'px-customers'})}${field('customerPhone','هاتف الزبون','tel',edit?.customerPhone||'')}</div>
     </section>
     <section class="form-section">
       <h4>${esc(tr('المبالغ والدفعات'))}</h4><p>${esc(tr('أدخل المبالغ والدفعات الفعلية.'))}</p>
-      <div class="form-grid">${field('purchase','الشراء','number',edit?.purchase??edit?.buy??'',{required:true,min:0,step:'any'})}${field('sale','البيع','number',edit?.sale??edit?.sell??'',{required:true,min:0,step:'any'})}${field('expenses','المصروفات','number',edit?.expenses??edit?.exp??0,{min:0,step:'any'})}${field('paid','المدفوع للمورد','number',edit?.paid||0,{min:0,step:'any'})}${field('received','المقبوض من الزبون','number',edit?.received??edit?.recv??0,{min:0,step:'any'})}${selectField('method','طريقة الدفع',methodOptions(edit?.method||'نقداً'),edit?.method||'نقداً')}</div>
+      <div class="form-grid">${field('purchase','الشراء','number',edit?.purchase??edit?.buy??'',{required:true,min:0,step:'any'})}${field('sale','البيع','number',edit?.sale??edit?.sell??'',{required:true,min:0,step:'any'})}${typeof expensesTotalField==='function'?expensesTotalField(edit):field('expenses','المصروفات','number',edit?.expenses??edit?.exp??0,{min:0,step:'any'})}${field('paid','المدفوع للمورد','number',edit?.paid||0,{min:0,step:'any'})}${field('received','المقبوض من الزبون','number',edit?.received??edit?.recv??0,{min:0,step:'any'})}${selectField('method','طريقة الدفع',methodOptions(edit?.method||'نقداً'),edit?.method||'نقداً')}</div>
     </section>
+    ${typeof dealExpenseSection==='function'?dealExpenseSection(edit):''}
     <section class="form-section">
       <h4>${esc(tr('مواعيد الاستحقاق والملاحظات'))}</h4><p>${esc(tr('أضف مواعيد الاستحقاق وأي ملاحظات.'))}</p>
       <div class="form-grid">${field('dueDate','استحقاق المورد','date',edit?.dueDate||'')}${field('customerDueDate','استحقاق الزبون','date',edit?.customerDueDate||'')}${field('note','ملاحظات وشروط الصفقة','text',edit?.note||'',{full:true})}</div>
     </section>
-    <datalist id="catalog-suggestions">${liveDocs('catalog').map(x=>`<option value="${esc(x.name)}"></option>`).join('')}</datalist>
+    <datalist id="catalog-suggestions">${typeof itemSuggestions==='function'?itemSuggestions():liveDocs('catalog').map(x=>`<option value="${esc(x.name)}"></option>`).join('')}</datalist>${typeof contactLists==='function'?contactLists():''}
     <div class="profit-box" style="margin-top:13px"><span>${esc(tr('الربح بعد المصاريف'))}</span><strong id="deal-live-profit">${money(num(edit?.sale??edit?.sell)-num(edit?.purchase??edit?.buy)-num(edit?.expenses??edit?.exp))}</strong></div>
     ${formFooter('تُحفظ الدفعات الجزئية وسجلها منفصلاً.','حفظ الصفقة',editing)}
   </form><div class="live-preview stack">${panel('ملخص الصفقة',`<div class="metric-row"><span>${esc(tr('الشراء'))}</span><strong>${money(edit?.purchase??edit?.buy)}</strong></div><div class="metric-row"><span>${esc(tr('البيع'))}</span><strong>${money(edit?.sale??edit?.sell)}</strong></div><div class="metric-row"><span>${esc(tr('المصروفات'))}</span><strong>${money(edit?.expenses??edit?.exp)}</strong></div><div class="metric-row"><span>${esc(tr('المطلوب تحصيله'))}</span><strong>${money(Math.max(0,num(edit?.sale??edit?.sell)-num(edit?.received??edit?.recv)))}</strong></div><div class="metric-row"><span>${esc(tr('المطلوب سداده'))}</span><strong>${money(Math.max(0,num(edit?.purchase??edit?.buy)-num(edit?.paid)))}</strong></div>`)}${panel('نصيحة تنظيمية',`<div class="notice info">${esc(tr('وثّق تكلفة الشراء والمصاريف والدفعات الفعلية، ولا تعتمد على الربح المتوقع وحده.'))}</div>`)}</div></div>`:`<div class="notice">${esc(tr('صلاحية المشاهدة فقط'))}</div>`;

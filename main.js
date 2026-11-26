@@ -180,7 +180,10 @@ async function saveDeal(o){
   if(!item)throw new Error(tr('أدخل اسم السلعة / الخدمة'));
   const qty=assertMoney(o,'qty','الكمية');
   if(qty<=0)throw new Error(tr('يجب أن تكون الكمية أكبر من صفر'));
-  const purchase=assertMoney(o,'purchase','الشراء'),sale=assertMoney(o,'sale','البيع'),expenses=assertMoney(o,'expenses','المصروفات'),paid=assertMoney(o,'paid','المدفوع للمورد'),received=assertMoney(o,'received','المقبوض من الزبون');
+  const purchase=assertMoney(o,'purchase','الشراء'),sale=assertMoney(o,'sale','البيع'),expenses0=assertMoney(o,'expenses','المصروفات'),paid=assertMoney(o,'paid','المدفوع للمورد'),received=assertMoney(o,'received','المقبوض من الزبون');
+  const expenseItems=(()=>{try{const a=JSON.parse(o.expenseItems||'[]');return Array.isArray(a)?a.filter(x=>x&&num(x.v)>0).map(x=>({k:String(x.k||'other').slice(0,30),l:String(x.l||'').slice(0,60),v:Math.round(num(x.v)*100)/100})):[]}catch(e){return[]}})();
+  const rearing=(()=>{try{const r=JSON.parse(o.rearing||'null');return r&&typeof r==='object'?{days:num(r.days),feedDay:num(r.feedDay),vet:num(r.vet),careDay:num(r.careDay)}:null}catch(e){return null}})();
+  const expenses=expenseItems.length?Math.round(expenseItems.reduce((s,x)=>s+x.v,0)*100)/100:expenses0;
   if(paid>purchase||received>sale)throw new Error(tr('المبلغ المدفوع لا يمكن أن يتجاوز الإجمالي'));
   let inventoryItemId=old?.inventoryItemId||'',inventoryMovement=old?.inventoryMovement||'none',inventoryDelta=num(old?.inventoryDelta||0);
   const stockPlan=new Map();
@@ -202,7 +205,7 @@ async function saveDeal(o){
   }else if(old?.inventoryItemId&&num(old.inventoryDelta)){
     if(qty!==num(old.qty)||item!==old.item)throw new Error(tr('هذا السجل مرتبط بحركة مخزون؛ فعّل التحديث التلقائي لتغيير الصنف أو الكمية.'));
   }
-  const obj={kind:old?.kind||'deal',ref:old?.ref||`DL-${Date.now().toString(36).toUpperCase()}`,date:o.date||today(),time:o.time||nowTime(),item,qty,activity:o.activity||'',goodType:o.goodType||'',animalId:o.animalId||'',animalName:docById('animals',o.animalId||'')?.name||old?.animalName||'',supplier:(o.supplier||'').trim(),supplierPhone:(o.supplierPhone||'').trim(),customer:(o.customer||'').trim(),customerPhone:(o.customerPhone||'').trim(),purchase,sale,expenses,paid,received,method:o.method||'نقداً',dueDate:o.dueDate||'',customerDueDate:o.customerDueDate||'',note:(o.note||'').trim(),payments:Array.isArray(old?.payments)?old.payments:[],inventoryItemId,inventoryMovement,inventoryDelta};
+  const obj={kind:old?.kind||'deal',ref:old?.ref||`DL-${Date.now().toString(36).toUpperCase()}`,date:o.date||today(),time:o.time||nowTime(),item,qty,activity:o.activity||'',goodType:o.goodType||'',animalId:o.animalId||'',animalName:docById('animals',o.animalId||'')?.name||old?.animalName||'',supplier:(o.supplier||'').trim(),supplierPhone:(o.supplierPhone||'').trim(),customer:(o.customer||'').trim(),customerPhone:(o.customerPhone||'').trim(),purchase,sale,expenses,expenseItems,rearing,paid,received,method:o.method||'نقداً',dueDate:o.dueDate||'',customerDueDate:o.customerDueDate||'',note:(o.note||'').trim(),payments:Array.isArray(old?.payments)?old.payments:[],inventoryItemId,inventoryMovement,inventoryDelta};
   for(const [id,stock] of stockPlan){if(docById('catalog',id))updateDoc('catalog',id,{stock})}
   if(old)updateDoc('records',old.id,obj);else createDoc('records',obj);
   editingId=null;await commit({message:'تم حفظ التغييرات'})

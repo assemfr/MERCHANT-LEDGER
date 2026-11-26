@@ -60,7 +60,8 @@ const OPTG=()=>[
  [B('البيانات','Data'),[
   {k:'action:backup',i:'download',l:B('نسخة احتياطية (JSON)','Backup (JSON)'),sub:backupSub()},
   {k:'action:encrypted-backup',i:'lock',l:B('نسخة مشفّرة بكلمة مرور','Password-encrypted backup')},
-  {k:'action:csv',i:'file',l:B('تصدير Excel (CSV)','Export Excel (CSV)')},
+  {k:'nx:report',i:'chart',l:B('تقرير ومشاركة (يومي · شهري · سنوي)','Report & share (daily · monthly · yearly)')},
+  {k:'action:csv',i:'file',l:B('تصدير كل البيانات (CSV)','Export all data (CSV)')},
   {k:'nx:persist',i:'shieldcheck',l:B('حماية البيانات من المسح التلقائي','Protect data from auto-clean'),s:persisted?B('مفعّلة','On'):''},
   {k:'nx:ws',i:'store',l:B('دفاتر المتاجر على الجهاز','Ledgers on this device')}]],
  [B('التطبيق','App'),[
@@ -72,7 +73,7 @@ const OPTG=()=>[
 const optBtn=o=>{const [t,v]=o.k.split(':'),attr=t==='action'?`data-action="${v}"`:t==='page'?`data-page="${v}"`:`data-nx="${v}"`;return `<button type="button" class="nx-opt" role="menuitem" ${attr}>${ic(o.i,20)}<span>${esc(o.l)}${o.sub?`<span class="nx-sub">${esc(o.sub)}</span>`:''}</span>${o.s?`<em class="nx-state">${esc(o.s)}</em>`:''}</button>`};
 const menuHTML=()=>OPTG().map(g=>`<div class="nx-mlabel">${esc(g[0])}</div>${g[1].map(optBtn).join('')}`).join('');
 const HOT={deals:'new-deal',debts:'focus-debt',repairs:'new-repair',treasury:'focus-voucher',catalog:'focus-catalog',livestock:'focus-animal',lands:'focus-land'};
-const quickHTML=()=>{const hot=HOT[typeof currentPage!=='undefined'?currentPage:''],L=[...QA].sort((a,b)=>(b[0]===hot)-(a[0]===hot));return `<div class="nx-grid">${L.map(q=>`<button type="button" class="nx-item${q[0]===hot?' nx-hot':''}" ${q[0]===hot?`data-hot="${B('هذه الصفحة','This page')}"`:''} data-action="${q[0]}">${ic(q[1],24)}<span>${B(q[2],q[3])}</span></button>`).join('')}</div>`};
+const quickHTML=()=>{const hot=HOT[typeof currentPage!=='undefined'?currentPage:''],L=[...QA].sort((a,b)=>(b[0]===hot)-(a[0]===hot));return `<div class="nx-grid">${L.filter(q=>!window.PXA||PXA.actionOk(q[0])).map(q=>`<button type="button" class="nx-item${q[0]===hot?' nx-hot':''}" ${q[0]===hot?`data-hot="${B('هذه الصفحة','This page')}"`:''} data-action="${q[0]}">${ic(q[1],24)}<span>${B(q[2],q[3])}</span></button>`).join('')}</div>`};
 const moreHTML=()=>[...GROUPS,['النظام','System',[['settings','gear','الإعدادات والنسخ','Settings & backups']]]].map(g=>{const it=g[2].filter(x=>allowed(x[0]));return it.length?`<div class="nx-label">${B(g[0],g[1])}</div><div class="nx-grid">${it.map(x=>`<button type="button" class="nx-item" data-page="${x[0]}">${ic(x[1],24)}<span>${B(x[2],x[3])}</span></button>`).join('')}</div>`:''}).join('');
 
 /* ----- sheet ----- */
@@ -132,6 +133,7 @@ function handleNx(k){
   else if(k==='amounts')PX.toggleHide();
   else if(k==='theme')PX.cycleTheme();
   else if(k==='persist')askPersist();
+  else if(k==='report'&&window.PXR)PXR.open();
   else if(k==='share')shareApp();
 }
 
